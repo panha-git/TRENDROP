@@ -1,8 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f8f9fc;
-  --foreground: #0f172a;
+  --background: #101014;
+  --foreground: #ffffff;
+  --surface: #1b1b23;
+  --surface-elevated: #222229;
+  --accent: #8b5cf6;
+  --accent-light: #a78bfa;
+  --text-secondary: #a1a1aa;
+  --border-subtle: #34343e;
 }
 
 @theme inline {
@@ -29,4 +35,167 @@ body {
 button,
 input {
   font: inherit;
+}
+
+.commerce-theme {
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--foreground);
+  color-scheme: dark;
+}
+
+.commerce-theme .bg-white,
+.commerce-theme .bg-white\/90,
+.commerce-theme .bg-white\/95 {
+  background-color: var(--surface);
+}
+
+.commerce-theme .bg-slate-50,
+.commerce-theme .bg-slate-100,
+.commerce-theme .bg-\[\#f8f9fc\] {
+  background-color: var(--surface-elevated);
+}
+
+.commerce-theme .bg-purple-50,
+.commerce-theme .bg-purple-100,
+.commerce-theme .bg-purple-50\/40 {
+  background-color: #30283f;
+}
+
+.commerce-theme .bg-purple-600,
+.commerce-theme .bg-rose-600 {
+  background-color: var(--accent);
+}
+
+.commerce-theme .bg-purple-700,
+.commerce-theme .bg-rose-700,
+.commerce-theme .hover\:bg-purple-700:hover,
+.commerce-theme .hover\:bg-rose-700:hover {
+  background-color: #7544dc;
+}
+
+.commerce-theme .bg-purple-200\/40,
+.commerce-theme .bg-rose-200\/30 {
+  background-color: transparent;
+}
+
+.commerce-theme .bg-gradient-to-tr {
+  background-image: none;
+  background-color: var(--accent);
+}
+
+.commerce-theme .border-slate-100,
+.commerce-theme .border-slate-200,
+.commerce-theme .border-slate-200\/80,
+.commerce-theme .border-slate-200\/60,
+.commerce-theme .border-slate-300 {
+  border-color: var(--border-subtle);
+}
+
+.commerce-theme .text-slate-900,
+.commerce-theme .text-slate-800 {
+  color: var(--foreground);
+}
+
+.commerce-theme .text-slate-700,
+.commerce-theme .text-slate-600,
+.commerce-theme .text-slate-500,
+.commerce-theme .text-slate-400 {
+  color: var(--text-secondary);
+}
+
+.commerce-theme .text-slate-300 {
+  color: #71717a;
+}
+
+.commerce-theme .text-purple-700,
+.commerce-theme .text-purple-600,
+.commerce-theme .text-rose-600,
+.commerce-theme .text-rose-500 {
+  color: var(--accent-light);
+}
+
+.commerce-theme .text-purple-900 {
+  color: #ddd6fe;
+}
+
+.commerce-theme .border-purple-200,
+.commerce-theme .border-purple-200\/60,
+.commerce-theme .border-purple-300 {
+  border-color: #574373;
+}
+
+.commerce-theme .hover\:text-slate-900:hover,
+.commerce-theme .hover\:text-purple-900:hover,
+.commerce-theme .group:hover .group-hover\:text-purple-700 {
+  color: #ddd6fe;
+}
+
+.commerce-theme .hover\:border-purple-200:hover {
+  border-color: #574373;
+}
+
+.commerce-theme .hover\:bg-slate-100:hover,
+.commerce-theme .hover\:bg-slate-200:hover {
+  background-color: #30303a;
+}
+
+.commerce-theme .blur-3xl {
+  display: none;
+}
+
+.commerce-theme .shadow-sm,
+.commerce-theme .shadow-md,
+.commerce-theme .shadow-xl,
+.commerce-theme .shadow-\[0_8px_30px_rgba\(15\,23\,42\,0\.08\)\] {
+  --tw-shadow: 0 1px 2px rgb(0 0 0 / 18%);
+  box-shadow: var(--tw-shadow);
+}
+
+.commerce-card {
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.commerce-button-primary {
+  border-radius: 10px;
+  background: var(--accent);
+  color: white;
+  transition: background-color 150ms ease, transform 150ms ease;
+}
+
+.commerce-button-primary:hover {
+  background: #7544dc;
+}
+
+.commerce-button-primary:focus-visible,
+.commerce-button-secondary:focus-visible,
+.commerce-theme button:focus-visible,
+.commerce-theme a:focus-visible,
+.commerce-theme input:focus-visible,
+.commerce-theme select:focus-visible {
+  outline: 2px solid var(--accent-light);
+  outline-offset: 2px;
+}
+
+.commerce-button-secondary {
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  background: var(--surface-elevated);
+  color: var(--foreground);
+  transition: border-color 150ms ease, background-color 150ms ease;
+}
+
+.commerce-button-secondary:hover {
+  border-color: #574373;
+  background: #30303a;
+}
+
+.commerce-section-heading {
+  color: var(--foreground);
+  font-family: var(--font-headline), sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.3;
 }
