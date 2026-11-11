@@ -2,8 +2,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { addCartItem, useCartCount } from "@/lib/cart";
+import { addCartItem, addCartItems, useCartCount } from "@/lib/cart";
+import { getProductById, products } from "@/lib/catalog";
 
 const productImages = [
   {
@@ -42,7 +44,7 @@ const variants = [
 const detailTabs = [
   "Description",
   "Specifications",
-  "Customer Reviews (1,840)",
+  "Customer Reviews (sample)",
   "Seller Information",
 ] as const;
 
@@ -164,6 +166,17 @@ function RatingStars({ size = "text-[15px]" }: { size?: string }) {
 }
 
 export default function ProductPage() {
+  const router = useRouter();
+  const product = getProductById("aeroglow-rgb-sunset-lamp")!;
+  const bundleProducts = [
+    product,
+    ...products.filter(
+      (item) =>
+        item.id === "glassskin-pept-hydrate-mist" ||
+        item.id === "clipsound-transparent-earbuds",
+    ),
+  ];
+  const bundleTotal = bundleProducts.reduce((sum, item) => sum + item.price, 0);
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedVariant, setSelectedVariant] = useState(variants[0].name);
   const [quantity, setQuantity] = useState(1);
@@ -174,28 +187,56 @@ export default function ProductPage() {
   const [notice, setNotice] = useState("");
   const [isFavorite, setIsFavorite] = useState(false);
 
-  const subtotal = 19.99 * quantity;
-  const creatorDiscount = 4;
-  const total = Math.max(0, subtotal - creatorDiscount);
+  const total = product.price * quantity;
 
   function addToCart(amount = quantity) {
-    addCartItem(
-      {
-        id: "aeroglow-rgb-sunset-lamp",
-        name: "AeroGlow RGB Smart Sunset Lamp & Halo Projection",
-        price: 19.99,
-        image: productImages[0].src,
-      },
-      amount,
-    );
-    setNotice(
-      `${amount} AeroGlow ${amount === 1 ? "lamp" : "lamps"} added to your cart.`,
-    );
+    try {
+      addCartItem(
+        {
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          image: product.image,
+          variant: selectedVariant,
+        },
+        amount,
+      );
+    } catch (error) {
+      console.error("Could not add AeroGlow to the cart.", error);
+      setNotice("Could not add this product. Please try again.");
+      window.setTimeout(() => setNotice(""), 3000);
+      return false;
+    }
+    setNotice(`${amount} AeroGlow ${amount === 1 ? "lamp" : "lamps"} added to your cart.`);
     window.setTimeout(() => setNotice(""), 3000);
+    return true;
   }
 
   function handleCheckout() {
-    setNotice("Checkout is not connected yet.");
+    if (addToCart()) {
+      router.push("/cart");
+    }
+  }
+
+  function addBundleToCart() {
+    try {
+      addCartItems(
+        bundleProducts.map((item) => ({
+          item: {
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            image: item.image,
+            ...(item.id === product.id ? { variant: selectedVariant } : {}),
+          },
+          quantity: 1,
+        })),
+      );
+      setNotice("The three selected products were added to your cart.");
+    } catch (error) {
+      console.error("Could not add the product bundle to the cart.", error);
+      setNotice("Could not add the bundle. Please try again.");
+    }
     window.setTimeout(() => setNotice(""), 3000);
   }
 
@@ -411,17 +452,15 @@ export default function ProductPage() {
                   <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-600 font-[family-name:var(--font-headline)] text-xl font-bold text-white shadow-md shadow-violet-600/20">NT</div>
                   <div>
                     <div className="flex flex-wrap items-center gap-2">
-                      <h2 className="font-[family-name:var(--font-headline)] text-lg font-bold text-slate-900">NovaTech Studio</h2>
+                      <h2 className="font-[family-name:var(--font-headline)] text-lg font-bold text-slate-900">{product.seller}</h2>
                       <span className="inline-flex items-center gap-1 rounded-full bg-violet-600/10 px-2.5 py-0.5 text-xs font-semibold text-violet-700">
-                        <Icon className="text-[14px]">verified</Icon> Verified Brand
+                        <Icon className="text-[14px]">storefront</Icon> Sample seller
                       </span>
                     </div>
                     <div className="mt-1 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-xs text-slate-500">
-                      <span className="flex items-center gap-0.5 font-semibold text-amber-600"><Icon className="text-[14px] text-amber-500">star</Icon>4.9 ★ (3,420)</span>
+                      <span className="flex items-center gap-0.5 font-semibold text-amber-600"><Icon className="text-[14px] text-amber-500">star</Icon>{product.rating} sample rating</span>
                       <span>•</span>
-                      <span className="flex items-center gap-0.5 font-semibold text-emerald-600"><Icon className="text-[14px]">sentiment_very_satisfied</Icon>99.4% Positive</span>
-                      <span>•</span>
-                      <span className="text-slate-600">Ships within 24h from California</span>
+                      <span className="text-slate-600">Shipping not connected</span>
                     </div>
                   </div>
                 </div>
@@ -441,12 +480,12 @@ export default function ProductPage() {
                     </span>
                     <div className="flex items-center gap-1 text-xs text-slate-600">
                       <RatingStars />
-                      <span className="font-bold text-slate-900">4.9</span>
-                      <span className="hidden text-slate-400 sm:inline">(1,840 verified reviews)</span>
+                      <span className="font-bold text-slate-900">{product.rating}</span>
+                      <span className="hidden text-slate-400 sm:inline">(sample rating)</span>
                     </div>
                   </div>
                   <h1 className="font-[family-name:var(--font-headline)] text-2xl font-extrabold leading-snug tracking-tight text-slate-900 sm:text-[26px]">
-                    AeroGlow RGB Smart Sunset Lamp &amp; Halo Projection
+                    {product.name}
                   </h1>
                   <p className="text-xs leading-relaxed text-slate-500">
                     App + 24-Key Wireless RF Remote Control • 360° Axis Swivel • Aircraft-grade Matte Aluminum Alloy
@@ -455,22 +494,21 @@ export default function ProductPage() {
 
                 <div className="flex flex-wrap items-baseline justify-between gap-2 rounded-2xl border border-slate-100 bg-slate-50/80 p-4">
                   <div className="flex flex-wrap items-baseline gap-2 sm:gap-3">
-                    <span className="font-[family-name:var(--font-headline)] text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">$19.99</span>
-                    <span className="text-base font-medium text-slate-400 line-through">$49.99</span>
-                    <span className="rounded-md border border-teal-200/60 bg-teal-50 px-2 py-0.5 text-xs font-bold text-teal-600">Save $30.00</span>
+                    <span className="font-[family-name:var(--font-headline)] text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">${product.price.toFixed(2)}</span>
+                    <span className="text-base font-medium text-slate-400 line-through">${product.compareAtPrice.toFixed(2)}</span>
+                    <span className="rounded-md border border-teal-200/60 bg-teal-50 px-2 py-0.5 text-xs font-bold text-teal-600">Sample catalog price</span>
                   </div>
-                  <span className="rounded-full bg-red-500 px-3 py-1 text-xs font-bold uppercase tracking-wider text-white shadow-sm">-60% Flash Drop</span>
+                  <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">USD</span>
                 </div>
 
-                <div className="flex items-center gap-2.5 rounded-xl border border-rose-200/60 bg-rose-50 px-3.5 py-2.5 text-xs text-rose-700">
-                  <Icon className="shrink-0 animate-bounce text-[18px] text-red-500">local_fire_department</Icon>
-                  <span className="font-semibold">🔥 Only 14 left in stock — 482 shoppers viewing right now!</span>
+                <div className="rounded-xl border border-amber-200 bg-amber-50 px-3.5 py-2.5 text-xs leading-5 text-amber-900">
+                  Sample marketplace listing. Live inventory, shipping, and taxes are not connected.
                 </div>
 
                 <div className="flex flex-col gap-2.5">
                   <div className="flex items-center justify-between text-xs">
                     <span className="font-bold text-slate-800">Color: <span className="font-semibold text-violet-600">{selectedVariant}</span></span>
-                    <span className="flex items-center gap-1 font-semibold text-teal-600"><span className="h-1.5 w-1.5 rounded-full bg-teal-500" />In Stock (Ready to ship)</span>
+                    <span className="text-xs text-slate-500">Availability not connected</span>
                   </div>
                   <div className="grid grid-cols-4 gap-2">
                     {variants.map((variant) => {
@@ -498,7 +536,7 @@ export default function ProductPage() {
                 <div className="flex items-center justify-between rounded-xl border border-slate-200/80 bg-slate-50 px-4 py-2.5">
                   <div>
                     <span className="block text-xs font-bold text-slate-800">Quantity</span>
-                    <span className="text-[10px] font-semibold text-teal-600">Limit 5 per customer for flash drop</span>
+                    <span className="text-[10px] text-slate-500">Maximum 99 per option</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <button
@@ -512,8 +550,8 @@ export default function ProductPage() {
                     <button
                       aria-label="Increase quantity"
                       className="flex h-7 w-7 items-center justify-center rounded-lg border border-slate-200 bg-white text-sm font-bold text-slate-700 shadow-sm transition hover:bg-slate-100"
-                      disabled={quantity >= 5}
-                      onClick={() => setQuantity((value) => Math.min(5, value + 1))}
+                      disabled={quantity >= 99}
+                      onClick={() => setQuantity((value) => Math.min(99, value + 1))}
                       type="button"
                     >+</button>
                   </div>
@@ -526,7 +564,7 @@ export default function ProductPage() {
                     type="button"
                   >
                     <Icon className="text-[20px]">bolt</Icon>
-                    Buy Now — Instant Checkout (${total.toFixed(2)})
+                    Buy now · continue to order preview (${total.toFixed(2)})
                   </button>
                   <button
                     className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-slate-200 bg-white px-6 py-3.5 font-[family-name:var(--font-headline)] text-sm font-bold text-slate-800 shadow-sm transition hover:border-slate-300 hover:bg-slate-50"
@@ -538,40 +576,8 @@ export default function ProductPage() {
                   </button>
                 </div>
 
-                <div className="flex flex-col gap-2 rounded-2xl border border-slate-200/70 bg-slate-50/70 p-3.5 text-xs text-slate-700">
-                  <p className="flex items-center gap-2.5"><Icon className="shrink-0 text-[17px] text-teal-600">local_shipping</Icon><span><strong>Free Express Dispatch:</strong> 2–3 business days</span></p>
-                  <p className="flex items-center gap-2.5"><Icon className="shrink-0 text-[17px] text-violet-600">security</Icon><span><strong>Escrow Vault Protection:</strong> 30-Day Money-Back Guarantee</span></p>
-                  <p className="flex items-center gap-2.5"><Icon className="shrink-0 text-[17px] text-slate-600">lock</Icon><span><strong>256-Bit Bank-Grade SSL</strong> &amp; Stripe Verified Escrow Checkout</span></p>
-                </div>
-
-                <div className="flex flex-col gap-3.5 rounded-2xl border border-slate-200/80 bg-slate-50 p-4">
-                  <div className="flex items-center justify-between border-b border-slate-200/60 pb-2">
-                    <span className="flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-slate-700">
-                      <Icon className="text-[16px] text-violet-600">credit_card</Icon>Express 1-Tap Wallets
-                    </span>
-                    <span className="rounded-full bg-teal-100 px-2 py-0.5 text-[10px] font-bold text-teal-700">Zero Redirect</span>
-                  </div>
-                  <div className="grid grid-cols-3 gap-2">
-                    <button className="flex items-center justify-center rounded-xl bg-black px-3 py-2.5 text-xs font-bold text-white" onClick={handleCheckout} type="button">Pay</button>
-                    <button className="flex items-center justify-center rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs font-bold text-slate-800 shadow-sm" onClick={handleCheckout} type="button">GPay</button>
-                    <button className="flex items-center justify-center gap-1 rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs text-slate-700 shadow-sm" onClick={handleCheckout} type="button"><Icon className="text-[15px] text-violet-600">credit_card</Icon><span className="font-mono text-[10px]">••4242</span></button>
-                  </div>
-                  <div className="flex items-center justify-between rounded-xl border border-violet-600/20 bg-violet-600/10 px-3 py-2">
-                    <div className="flex items-center gap-2">
-                      <Icon className="text-[16px] text-violet-600">sell</Icon>
-                      <div><span className="font-mono text-xs font-bold text-violet-600">VIRAL20</span><span className="ml-1 text-[11px] text-slate-500">(-$4.00 creator discount)</span></div>
-                    </div>
-                    <span className="rounded-md bg-violet-600/15 px-2 py-0.5 text-[10px] font-bold text-violet-600">APPLIED</span>
-                  </div>
-                  <div className="flex flex-col gap-1.5 border-t border-slate-200/60 pt-1 text-xs text-slate-600">
-                    <div className="flex justify-between"><span>Subtotal ({quantity} {quantity === 1 ? "item" : "items"})</span><span className="font-semibold text-slate-900">${subtotal.toFixed(2)}</span></div>
-                    <div className="flex justify-between text-red-500"><span>Creator Discount (VIRAL20)</span><span>-$4.00</span></div>
-                    <div className="flex justify-between"><span>Tracked Shipping</span><span className="font-semibold text-teal-600">FREE</span></div>
-                    <div className="mt-1 flex items-baseline justify-between border-t border-slate-200 pt-2 font-[family-name:var(--font-headline)] font-extrabold">
-                      <span className="text-sm text-slate-900">Total Due</span>
-                      <span className="text-xl font-bold text-violet-600">${total.toFixed(2)}</span>
-                    </div>
-                  </div>
+                <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-5 text-amber-950">
+                  Checkout saves an unpaid order preview. No payment is taken, and shipping has not been arranged.
                 </div>
               </div>
             </aside>
@@ -638,7 +644,7 @@ export default function ProductPage() {
               </div>
             )}
 
-            {activeTab === "Customer Reviews (1,840)" && (
+            {activeTab === "Customer Reviews (sample)" && (
               <div className="flex flex-col gap-6" role="tabpanel">
                 <div className="flex flex-col items-center justify-between gap-6 rounded-2xl border border-slate-100 bg-slate-50 p-5 md:flex-row">
                   <div className="flex items-center gap-6">
@@ -690,15 +696,15 @@ export default function ProductPage() {
                 <div className="flex items-start gap-4 rounded-2xl border border-slate-100 bg-slate-50 p-5">
                   <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 to-indigo-600 text-lg font-bold text-white">NT</div>
                   <div>
-                    <div className="flex flex-wrap items-center gap-2"><h2 className="text-base font-bold text-slate-900">NovaTech Studio</h2><span className="rounded-full bg-teal-50 px-2 py-0.5 text-xs font-bold text-teal-700">Tier-1 TrendDrop Merchant</span></div>
-                    <p className="mt-1 text-xs leading-relaxed text-slate-600">NovaTech Studio specializes in studio-grade lighting hardware and kinetic creator desk accessories. Inventory ships from San Bernardino, CA fulfillment facilities.</p>
+                    <div className="flex flex-wrap items-center gap-2"><h2 className="text-base font-bold text-slate-900">{product.seller}</h2><span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-700">Sample seller</span></div>
+                    <p className="mt-1 text-xs leading-relaxed text-slate-600">Seller profile, inventory, and fulfillment details are not connected in this sample catalog.</p>
                   </div>
                 </div>
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                   {[
-                    ["Dispatch Speed", "Same Day (100% On-Time)"],
-                    ["Customer Rating", "4.9 / 5.0 (3,420 Reviews)"],
-                    ["Buyer Protection", "Escrow Covered Guarantee"],
+                    ["Dispatch Speed", "Not connected"],
+                    ["Customer Rating", `${product.rating} sample rating`],
+                    ["Buyer Protection", "No payment protection integration"],
                   ].map(([label, value]) => <div className="flex flex-col gap-1 rounded-xl border border-slate-100 bg-white p-4 shadow-sm" key={label}><span className="text-[11px] font-semibold uppercase text-slate-400">{label}</span><span className="text-sm font-bold text-slate-900">{value}</span></div>)}
                 </div>
               </div>
@@ -710,34 +716,30 @@ export default function ProductPage() {
           <div className="flex flex-col gap-6">
             <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-end">
               <div>
-                <span className="text-xs font-extrabold uppercase tracking-wider text-violet-600">Viral Pairings &amp; Curated Bundles</span>
-                <h2 className="font-[family-name:var(--font-headline)] text-2xl font-extrabold text-slate-900">Frequently Bought Together</h2>
+                <span className="text-xs font-extrabold uppercase tracking-wider text-violet-600">Product bundle</span>
+                <h2 className="font-[family-name:var(--font-headline)] text-2xl font-extrabold text-slate-900">Add a bundle to your cart</h2>
               </div>
-              <p className="text-xs text-slate-500">Frequently bundled together by 89% of AeroGlow customers</p>
+              <p className="text-xs text-slate-500">Sample catalog prices; no bundle discount is applied.</p>
             </div>
 
             <div className="flex flex-col items-center justify-between gap-6 rounded-3xl border border-slate-200/80 bg-white p-6 shadow-[0_4px_24px_rgba(15,23,42,0.04)] lg:flex-row">
               <div className="flex flex-1 flex-wrap items-center justify-center gap-3 sm:gap-4">
-                {[
-                  ["This item", "AeroGlow Lamp", "$19.99", productImages[0].src],
-                  ["Ambient Mist", "AromaMist Diffuser", "$24.99", productImages[2].src],
-                  ["Sound Reactive", "SyncPulse Neon Bar", "$18.50", productImages[3].src],
-                ].map(([category, name, price, image], index) => (
-                  <div className="contents" key={name}>
+                {bundleProducts.map((bundleProduct, index) => (
+                  <div className="contents" key={bundleProduct.id}>
                     {index > 0 && <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-slate-100 text-sm font-bold text-slate-500">+</span>}
                     <div className="flex w-full items-center gap-3 rounded-2xl border border-slate-100 bg-slate-50 p-3 sm:w-auto">
-                      <Image alt={name} className="h-16 w-16 shrink-0 rounded-xl object-cover" height={64} src={image} unoptimized width={64} />
-                      <div><span className={`block text-[11px] font-bold ${index === 0 ? "text-violet-600" : "text-slate-500"}`}>{category}</span><span className="block max-w-[160px] truncate text-xs font-bold text-slate-900">{name}</span><span className="text-xs font-extrabold text-slate-900">{price}</span></div>
+                      <Image alt={bundleProduct.name} className="h-16 w-16 shrink-0 rounded-xl object-cover" height={64} src={bundleProduct.image} unoptimized width={64} />
+                      <div><span className={`block text-[11px] font-bold ${index === 0 ? "text-violet-600" : "text-slate-500"}`}>{bundleProduct.category}</span><span className="block max-w-[160px] truncate text-xs font-bold text-slate-900">{bundleProduct.name}</span><span className="text-xs font-extrabold text-slate-900">${bundleProduct.price.toFixed(2)}</span></div>
                     </div>
                   </div>
                 ))}
               </div>
               <div className="flex w-full shrink-0 flex-col items-center gap-3 border-t border-slate-200/80 pt-4 lg:w-auto lg:items-end lg:border-l lg:border-t-0 lg:pl-6 lg:pt-0">
                 <div className="text-center lg:text-right">
-                  <div className="flex items-center justify-center gap-2 lg:justify-end"><span className="text-xs text-slate-400 line-through">$63.48</span><span className="font-[family-name:var(--font-headline)] text-2xl font-extrabold text-slate-900">$50.78</span><span className="rounded-full bg-red-50 px-2 py-0.5 text-[10px] font-bold text-red-500">20% OFF</span></div>
-                  <span className="text-xs font-semibold text-teal-600">You save $12.70 on this 3-piece setup</span>
+                  <span className="font-[family-name:var(--font-headline)] text-2xl font-extrabold text-slate-900">${bundleTotal.toFixed(2)}</span>
+                  <span className="block text-xs text-slate-500">Total of these three items</span>
                 </div>
-                <button className="flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 px-6 py-3 font-[family-name:var(--font-headline)] text-xs font-bold text-white shadow-md shadow-violet-600/20 transition hover:bg-violet-700 sm:w-auto" onClick={() => addToCart(3)} type="button"><Icon className="text-[18px]">library_add</Icon>Add All 3 to Cart (Save 20%)</button>
+                <button className="flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 px-6 py-3 font-[family-name:var(--font-headline)] text-xs font-bold text-white shadow-md shadow-violet-600/20 transition hover:bg-violet-700 sm:w-auto" onClick={addBundleToCart} type="button"><Icon className="text-[18px]">library_add</Icon>Add all 3 to cart</button>
               </div>
             </div>
 

@@ -4,68 +4,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { addCartItem, useCartCount } from "@/lib/cart";
-
-const products = [
-  {
-    name: "AeroGlow RGB Audio Lamp",
-    category: "Tech & Audio",
-    seller: "NovaTech Studio",
-    rating: "4.8",
-    sold: "5.1k sold",
-    price: 19.99,
-    was: 49.99,
-    views: "8.4M",
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuAQGtIX--YWc1UxC7238Qpoal4j-SInU7Pz1SMuAjQQYIs7afvmIX8-GhaK9WMLgWxO5Aoq1hhh_X2aHy0WiIVmjZVshNznmf3hCm9w6diDKS3zOZhcAE6uwCBUA77QT-nrFsJ9ewT1kT2mBiBjcamVZxyVBSI-C_mxk4QzJNRcMqBYzz0jXLPBs0uqlNij_VK90cudFSKnZs_jxVHH7TAG7ulxnCWnhYkkNdCywew",
-    discount: "−60% OFF",
-  },
-  {
-    name: "GlassSkin Pept-Hydrate Mist",
-    category: "Beauty & Glow",
-    seller: "GlowLab Seoul",
-    rating: "4.9",
-    sold: "12.8k sold",
-    price: 16.5,
-    was: 30,
-    views: "19.8M",
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuA_PfByL0qTHTGbpi3Vf0Rio-KyZzLojeQLI4LCK1IMSU4-seje84ssF5XPxt8n0f_3PMp_Jmz4-hu7WVNBA61LTHNmUDsnRLprMJkOMmPQ8d2Te1IfoWhBu7-4oT9vS2ptiqy6U6qWCsCmilmm9vgym8IPTnrmRuFUDa03KL5Z-_s2apsclELjcbShIwrGz7yef8LuJawiHFHz8IgRjnc81vpEUQpdSieZJAcQdk4",
-    discount: "−45% OFF",
-  },
-  {
-    name: "GlowHydrate Smart UV Bottle",
-    category: "Wellness",
-    seller: "HydroPulse Tech",
-    rating: "4.7",
-    sold: "3.4k sold",
-    price: 18,
-    was: 30,
-    views: "4.2M",
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuCQN_wDYKS0RB3x80D4aYWpMqsrzVXSlWdlhc2ZRFUDXrSttwMuF7cTZjy-Bi8FUBaP9jCiVPTI4fvkTF7zJfPlby_oMGJ5He8BGcVF4F33XDhXwK-MngibMK9PZLX_hiDZrtFtLG2omeA8Od5clVTiwfPome2OQxizB--PKpEWfZPV7b7JyWuDdF6qAW9TFu9XaHqFzYMfuORMAUkCypmUGYmBd4FUagDQrEPP6TI",
-    discount: "−40% OFF",
-  },
-  {
-    name: "ClipSound Transparent Earbuds",
-    category: "Tech & Audio",
-    seller: "PulseAudio Inc",
-    rating: "4.9",
-    sold: "9.2k sold",
-    price: 34.9,
-    was: 56,
-    views: "11.3M",
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuDlBXshVRAXGwiLg7plkgZ2WTik7O3SYD5hy3INVnTFfXKzatccZb6zNIrW8H3Rsx7iNoRck0aF-ylQQZk6LqS16qIJHyOlzsLpSkdVfi4leITDJzt37xnbQZaHv73TeG6wQHiRtD5RJRLj6FXJhmlJvZg7YFgg2bGqKfX_-R3ZaIkKYaJiLNARI30PArxHDoRvyunhZ9cgTu3Q0zEKpBAYXmR_9mNZhjDBYoAn1Vo",
-    discount: "−38% OFF",
-  },
-];
+import { products, type CatalogProduct } from "@/lib/catalog";
 
 const deals = [
-  { title: "ChronoPulse V2 Ring", price: "$69.00", oldPrice: "$219", time: "03:14", image: products[2].image, discount: "−68% OFF" },
-  { title: "CloudMist Flame Unit", price: "$24.50", oldPrice: "$49", time: "04:20", image: products[1].image, discount: "−50% OFF" },
-  { title: "RetroWave 4K Cam", price: "$48.00", oldPrice: "$110", time: "01:52", image: products[3].image, discount: "−55% OFF" },
-  { title: "Lumina MagSafe Stand", price: "$29.99", oldPrice: "$56", time: "02:30", image: products[0].image, discount: "−46% OFF" },
-];
+  { id: "chronopulse-v2-ring", time: "03:14" },
+  { id: "cloudmist-flame-unit", time: "04:20" },
+  { id: "retrowave-4k-cam", time: "01:52" },
+  { id: "lumina-magsafe-stand", time: "02:30" },
+].flatMap(({ id, time }) => {
+  const product = products.find((item) => item.id === id);
+  return product ? [{ product, time }] : [];
+});
 
 const studios = [
   {
@@ -155,17 +104,19 @@ export default function Home() {
     });
   }, [category, query]);
 
-  function addToCart(name: string) {
-    const product = products.find((item) => item.name === name) ?? products[0];
-    const deal = deals.find((item) => item.title === name);
-    addCartItem({
-      id: name.toLowerCase().replaceAll(" ", "-"),
-      name,
-      price: deal ? Number(deal.price.slice(1)) : product.price,
-      image: deal?.image ?? product.image,
-    });
-
-    setNotice(`${name} added to your cart.`);
+  function addToCart(product: CatalogProduct) {
+    try {
+      addCartItem({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        image: product.image,
+      });
+      setNotice(`${product.name} added to your cart.`);
+    } catch (error) {
+      console.error("Could not add the product to the cart.", error);
+      setNotice("Could not add this product. Please try again.");
+    }
     window.setTimeout(() => setNotice(""), 2600);
   }
 
@@ -295,29 +246,27 @@ export default function Home() {
                   <Image alt="AeroGlow Halo 360 sunset lamp projecting a vivid ambient glow" className="object-cover transition duration-500 group-hover:scale-105" fill priority sizes="(max-width: 1024px) 100vw, 40vw" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdkAuob26NOhzAWBwPUCT4rKwNnD8tW0M_iu9I0zUVn_hEskozhMzDU3T9IEqK285kp6sqHIzFXblbbeX64Eou0k4l5e_FqgIEIg_5WDi49gOn7TqQBxBerfOnuVAFBWS0P0ZEhwIBPfqPtHLTDqOORCGU2keirjCiCbXclPqEntzeUpVNMgBMHnRhJnOu-5UOhIzYrhuts4SsronvlYJDRFz9wrpGDZmTztPunD8" unoptimized />
                   <div className="absolute left-3 top-3 flex flex-col gap-1.5">
                     <span className="inline-flex items-center gap-1 rounded-full bg-white/95 px-2 py-1 text-[9px] font-bold text-rose-600 shadow-sm">🔥 #1 VIRAL TIKTOK THIS WEEK</span>
-                    <span className="inline-flex items-center gap-1 rounded-full bg-slate-950/85 px-2 py-1 text-[9px] font-bold text-white"><Icon name="play_arrow" />18.4k watching</span>
+                    <span className="inline-flex items-center gap-1 rounded-full bg-slate-950/85 px-2 py-1 text-[9px] font-bold text-white">Featured product</span>
                   </div>
-                  <span className="absolute bottom-3 right-3 rounded-lg bg-rose-600 px-2 py-1 text-[10px] font-extrabold text-white">−62% OFF</span>
+                  <span className="absolute bottom-3 right-3 rounded-lg bg-rose-600 px-2 py-1 text-[10px] font-extrabold text-white">{products[0].discount}</span>
                 </div>
                 <div className="pt-3">
                   <div className="flex items-center justify-between gap-2 text-[10px]">
-                    <span className="font-bold uppercase tracking-wider text-purple-700">Smart Living · Drop #09</span>
-                    <span className="flex items-center gap-1 text-slate-500"><span className="text-amber-500">★</span><strong className="text-slate-900">4.9</strong> (3,420 reviews)</span>
+                    <span className="font-bold uppercase tracking-wider text-purple-700">{products[0].category}</span>
+                    <span className="flex items-center gap-1 text-slate-500"><span className="text-amber-500">★</span><strong className="text-slate-900">{products[0].rating}</strong></span>
                   </div>
-                  <h2 className="mt-1 font-[family-name:var(--font-headline)] text-sm font-bold text-slate-900">AeroGlow Halo 360° Sunset Matrix</h2>
-                  <p className="mt-1 text-[10px] leading-relaxed text-slate-500">App-controlled optical projection sphere. Viral ambient bedroom aesthetic upgraded for 80+ top interior creators.</p>
+                  <h2 className="mt-1 font-[family-name:var(--font-headline)] text-sm font-bold text-slate-900">{products[0].name}</h2>
+                  <p className="mt-1 text-[10px] leading-relaxed text-slate-500">Browse product details, available color options, and the current item price.</p>
                   <div className="mt-2 flex items-center gap-2">
-                    <span className="font-[family-name:var(--font-headline)] text-lg font-extrabold text-slate-900">$19.99</span>
-                    <span className="text-[10px] text-slate-400 line-through">$54.00</span>
-                    <span className="text-[10px] font-bold text-rose-600">Save $34.01</span>
+                    <span className="font-[family-name:var(--font-headline)] text-lg font-extrabold text-slate-900">${products[0].price.toFixed(2)}</span>
+                    <span className="text-[10px] text-slate-400 line-through">${products[0].compareAtPrice.toFixed(2)}</span>
+                    <span className="text-[10px] font-bold text-rose-600">Sample catalog price</span>
                   </div>
-                  <div className="mt-2 flex justify-between text-[9px] text-slate-500"><span>Claimed: 84%</span><span className="font-semibold text-rose-600">84% claimed — 16 units remain</span></div>
-                  <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200"><div className="h-full w-[84%] rounded-full bg-gradient-to-r from-rose-500 to-rose-600" /></div>
                 </div>
               </Link>
               <div className="mt-3 flex gap-2">
-                <button className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-rose-600 px-3 py-2.5 text-xs font-bold text-white transition hover:bg-rose-700" onClick={() => addToCart("AeroGlow Halo 360°")} type="button">
-                  <Icon className="text-[14px]" name="bolt" /> Claim Instant Drop
+                <button className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-rose-600 px-3 py-2.5 text-xs font-bold text-white transition hover:bg-rose-700" onClick={() => addToCart(products[0])} type="button">
+                  <Icon className="text-[14px]" name="shopping_cart" /> Add to Cart
                 </button>
                 <Link aria-label="View product details" className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-600 transition hover:bg-slate-50" href="/products/aeroglow">→</Link>
               </div>
@@ -327,18 +276,18 @@ export default function Home() {
 
         <section className="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm" id="kinetic-flash">
           <div className="mb-3 flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
-            <h2 className="flex items-center gap-2 text-xs font-semibold text-slate-900"><span className="text-rose-600">●</span>⚡ Kinetic Flash Deals — 15m Lightning Window <span className="rounded-full bg-rose-50 px-2 py-0.5 text-[9px] font-bold text-rose-600">ENDS IN 14:18</span></h2>
-            <span className="text-[9px] text-slate-500">↻ Live inventory decrement synced across 4 node clusters</span>
+            <h2 className="flex items-center gap-2 text-xs font-semibold text-slate-900"><span className="text-rose-600">●</span>Featured products</h2>
+            <span className="text-[9px] text-slate-500">Sample catalog · prices shown in USD</span>
           </div>
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
             {deals.map((deal) => (
-              <button className="flex items-center gap-2 rounded-xl border border-slate-100 bg-slate-50 p-2 text-left transition hover:border-purple-200 hover:bg-purple-50/40" key={deal.title} onClick={() => addToCart(deal.title)} type="button">
+              <button className="flex items-center gap-2 rounded-xl border border-slate-100 bg-slate-50 p-2 text-left transition hover:border-purple-200 hover:bg-purple-50/40" key={deal.product.id} onClick={() => addToCart(deal.product)} type="button">
                 <span className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-white">
-                  <Image alt="" className="object-cover" fill sizes="48px" src={deal.image} unoptimized />
+                  <Image alt="" className="object-cover" fill sizes="48px" src={deal.product.image} unoptimized />
                 </span>
                 <span className="min-w-0 flex-1">
-                  <span className="flex items-center justify-between gap-1"><span className="truncate text-[10px] font-bold text-slate-900">{deal.title}</span><span className="font-mono text-[8px] text-slate-400">{deal.time}</span></span>
-                  <span className="mt-0.5 flex items-center gap-1.5 text-[9px]"><span className="font-bold text-slate-900">{deal.price}</span><span className="text-slate-400 line-through">{deal.oldPrice}</span><span className="ml-auto text-[8px] font-bold text-rose-600">{deal.discount}</span></span>
+                  <span className="flex items-center justify-between gap-1"><span className="truncate text-[10px] font-bold text-slate-900">{deal.product.name}</span></span>
+                  <span className="mt-0.5 flex items-center gap-1.5 text-[9px]"><span className="font-bold text-slate-900">${deal.product.price.toFixed(2)}</span><span className="text-slate-400 line-through">${deal.product.compareAtPrice.toFixed(2)}</span></span>
                   <span className="mt-1 block h-1 overflow-hidden rounded-full bg-slate-200"><span className="block h-full w-3/4 rounded-full bg-rose-500" /></span>
                 </span>
               </button>
@@ -373,7 +322,7 @@ export default function Home() {
               return (
                 <article className="group flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-white p-3.5 shadow-sm transition duration-300 hover:border-purple-200 hover:shadow-xl" key={product.name}>
                   <div className="relative mb-3 aspect-square overflow-hidden rounded-xl border border-slate-100 bg-slate-100">
-                    <Link aria-label={`View ${product.name}`} className="absolute inset-0 z-0" href="/products/aeroglow" />
+                    <Link aria-label={`View ${product.name}`} className="absolute inset-0 z-0" href={`/products/${product.slug}`} />
                     <Image alt={product.name} className="object-cover transition-transform duration-500 group-hover:scale-105" fill sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw" src={product.image} unoptimized />
                     <div className="absolute left-2.5 top-2.5 flex flex-col items-start gap-1">
                       <span className="rounded-full bg-rose-600 px-2 py-0.5 text-[9px] font-bold text-white shadow-sm">{product.discount}</span>
@@ -386,12 +335,12 @@ export default function Home() {
                   <div className="flex flex-1 flex-col justify-between">
                     <div>
                       <div className="mb-1 flex items-center gap-1 text-xs font-semibold text-purple-700"><Icon className="text-[13px]" name="verified" />{product.seller}</div>
-                      <Link className="line-clamp-1 font-[family-name:var(--font-headline)] text-sm font-bold text-slate-900 transition group-hover:text-purple-700" href="/products/aeroglow">{product.name}</Link>
+                      <Link className="line-clamp-1 font-[family-name:var(--font-headline)] text-sm font-bold text-slate-900 transition group-hover:text-purple-700" href={`/products/${product.slug}`}>{product.name}</Link>
                       <div className="mt-1.5 flex items-center gap-1.5 text-xs"><span className="text-amber-500">★</span><span className="font-bold text-slate-900">{product.rating}</span><span className="text-slate-300">•</span><span className="text-slate-500">{product.sold}</span></div>
                     </div>
                     <div className="pt-3">
-                      <div className="mb-2.5 flex items-baseline gap-2"><span className="font-[family-name:var(--font-headline)] text-lg font-extrabold text-slate-900">${product.price.toFixed(2)}</span><span className="text-xs text-slate-400 line-through">${product.was.toFixed(2)}</span></div>
-                      <button className="flex w-full items-center justify-center gap-1.5 rounded-xl bg-slate-100 py-2.5 text-xs font-semibold text-slate-800 shadow-sm transition hover:bg-purple-600 hover:text-white active:scale-[0.98]" onClick={() => addToCart(product.name)} type="button">
+                      <div className="mb-2.5 flex items-baseline gap-2"><span className="font-[family-name:var(--font-headline)] text-lg font-extrabold text-slate-900">${product.price.toFixed(2)}</span><span className="text-xs text-slate-400 line-through">${product.compareAtPrice.toFixed(2)}</span></div>
+                      <button className="flex w-full items-center justify-center gap-1.5 rounded-xl bg-slate-100 py-2.5 text-xs font-semibold text-slate-800 shadow-sm transition hover:bg-purple-600 hover:text-white active:scale-[0.98]" onClick={() => addToCart(product)} type="button">
                         <Icon className="text-[16px]" name="shopping_cart" />Add to Cart
                       </button>
                     </div>

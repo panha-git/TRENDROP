@@ -1,23 +1,12 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { studentSchema } from "@/lib/validation/student";
-
-type RegisteredUser = {
-  id: string;
-  name: string;
-  gender: string;
-  age: number;
-  email: string;
-};
+import { registrationSchema } from "@/lib/validation/student";
 
 export default function SignupFormPage() {
-  const [users, setUsers] = useState<RegisteredUser[]>([]);
   const [error, setError] = useState("");
   const [status, setStatus] = useState("");
-  const [hasLoadedUsers, setHasLoadedUsers] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isLoadingUsers, setIsLoadingUsers] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -38,15 +27,15 @@ export default function SignupFormPage() {
     setIsSubmitting(true);
 
     try {
-      const formValidations = studentSchema.safeParse({
+      const formValidation = registrationSchema.safeParse({
         name: formData.get("name"),
         gender: formData.get("gender"),
         age: Number(formData.get("age")),
         email: formData.get("email"),
-        enrolled: true,
+        password,
       });
-      if (!formValidations.success) {
-        setError(formValidations.error.issues[0].message);
+      if (!formValidation.success) {
+        setError(formValidation.error.issues[0]?.message ?? "Please check your registration details.");
         setIsSubmitting(false);
         return;
       }
@@ -69,48 +58,13 @@ export default function SignupFormPage() {
       }
 
       form.reset();
-      setUsers([]);
-      setHasLoadedUsers(false);
-      setStatus(
-        "Registration saved. Click “Check database” to view registered users.",
-      );
+      setStatus("Registration saved. Sign-in is not available yet.");
     } catch {
       setError("Could not connect to the server. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
   }
-
-  async function loadUsers() {
-    setError("");
-    setStatus("");
-    setIsLoadingUsers(true);
-
-    try {
-      const response = await fetch("/api/registrations");
-      const result: { users?: RegisteredUser[]; error?: string } =
-        await response.json();
-
-      if (!response.ok || !result.users) {
-        setError(result.error ?? "Unable to load registrations.");
-        return;
-      }
-
-      setUsers(result.users);
-      setHasLoadedUsers(true);
-    } catch {
-      setError("Could not connect to the server. Please try again.");
-    } finally {
-      setIsLoadingUsers(false);
-    }
-  }
-  console.log("users", users);
-  console.log("error", error);
-  console.log("status", status);
-  console.log("hasLoadedUsers", hasLoadedUsers);
-  console.log("isSubmitting", isSubmitting);
-  console.log("isLoadingUsers", isLoadingUsers);
-  console.log("Registered users", users);
 
   return (
     <main className="flex min-h-screen flex-1 flex-col items-center bg-zinc-50 px-4 py-12 font-sans text-zinc-900">
@@ -137,7 +91,6 @@ export default function SignupFormPage() {
               name="name"
               placeholder="Jane Smith"
             />
-            <p className="text-red-500"> {error}</p>
           </div>
 
           <div>
@@ -152,7 +105,6 @@ export default function SignupFormPage() {
               placeholder="you@example.com"
               type="email"
             />
-            <p className="text-red-500"> {error}</p>
           </div>
 
           <div>
@@ -241,82 +193,7 @@ export default function SignupFormPage() {
           </button>
         </form>
 
-        <section
-          aria-labelledby="registered-users-heading"
-          className="mt-10 border-t border-zinc-100 pt-7"
-        >
-          <div className="flex items-center justify-between gap-4">
-            <h2 className="text-lg font-semibold" id="registered-users-heading">
-              Registered users
-            </h2>
-            <span className="rounded-full bg-indigo-50 px-3 py-1 text-sm font-medium text-indigo-700">
-              {users.length} {users.length === 1 ? "person" : "people"}
-            </span>
-          </div>
-
-          {status && (
-            <p className="mt-4 text-sm text-emerald-700" role="status">
-              {status}
-            </p>
-          )}
-          {error && (
-            <p className="mt-4 text-sm text-red-600" role="alert">
-              {error}
-            </p>
-          )}
-
-          <button
-            className="mt-4 h-10 rounded-xl border border-indigo-200 px-4 text-sm font-semibold text-indigo-700 transition hover:bg-indigo-50 disabled:cursor-not-allowed disabled:opacity-60"
-            disabled={isLoadingUsers}
-            onClick={loadUsers}
-            type="button"
-          >
-            {isLoadingUsers ? "Loading..." : "Check database"}
-          </button>
-
-          {users.length === 0 ? (
-            <p className="mt-4 text-sm text-zinc-500">
-              {hasLoadedUsers
-                ? "No registrations found in the database."
-                : "Click “Check database” to load registered users."}
-            </p>
-          ) : (
-            <ol className="mt-4 space-y-3">
-              {users.map((user, index) => (
-                <li
-                  className="rounded-2xl border border-zinc-200 bg-zinc-50/70 p-4"
-                  key={user.id}
-                >
-                  <div className="flex items-start gap-3">
-                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-xs font-semibold text-indigo-700">
-                      {index + 1}
-                    </span>
-                    <div className="min-w-0">
-                      <h3 className="font-semibold">{user.name}</h3>
-                      <dl className="mt-2 grid gap-x-4 gap-y-1 text-sm sm:grid-cols-2">
-                        <div>
-                          <dt className="inline text-zinc-500">Gender: </dt>
-                          <dd className="inline">{user.gender}</dd>
-                        </div>
-                        <div>
-                          <dt className="inline text-zinc-500">Age: </dt>
-                          <dd className="inline">{user.age}</dd>
-                        </div>
-                        <div className="sm:col-span-2">
-                          <dt className="inline text-zinc-500">Email: </dt>
-                          <dd className="inline break-all">{user.email}</dd>
-                        </div>
-                      </dl>
-                    </div>
-                  </div>
-                </li>
-              ))}
-            </ol>
-          )}
-          <p className="mt-4 text-xs text-zinc-500">
-            Passwords are never shown in the registered users list.
-          </p>
-        </section>
+        {status && <p className="mt-5 text-sm text-emerald-700" role="status">{status}</p>}
       </section>
     </main>
   );

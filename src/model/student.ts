@@ -4,7 +4,14 @@ const schema = new Schema(
   {
     name: { type: String, required: true, trim: true },
     age: { type: Number, required: true, min: 1, max: 120 },
-    email: { type: String, required: true, unique: true, trim: true },
+    gender: {
+      type: String,
+      required: true,
+      enum: ["Female", "Male", "Non-binary", "Prefer not to say"],
+    },
+    email: { type: String, required: true, unique: true, trim: true, lowercase: true },
+    passwordSalt: { type: String, required: true, select: false },
+    passwordHash: { type: String, required: true, select: false },
     //     phone: { type: String, required: true, trim: true },
     //     address: { type: String, required: true, trim: true },
   },
