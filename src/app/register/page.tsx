@@ -18,6 +18,7 @@ export default function RegisterPage() {
       name: String(data.get("name") ?? ""),
       email: String(data.get("email") ?? ""),
       password: String(data.get("password") ?? ""),
+      confirmPassword: String(data.get("confirmPassword") ?? ""),
     };
     if (payload.password !== String(data.get("confirmPassword") ?? "")) {
       setError("Your passwords do not match.");

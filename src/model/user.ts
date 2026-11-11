@@ -12,7 +12,12 @@ const userSchema = new Schema(
       maxlength: 254,
     },
     passwordHash: { type: String, required: true, select: false },
-    role: { type: String, enum: ["buyer", "seller"], default: "buyer", required: true },
+    role: {
+      type: String,
+      enum: ["buyer", "seller", "creator", "admin"],
+      default: "buyer",
+      required: true,
+    },
     sellerStatus: {
       type: String,
       enum: ["not_applied", "pending", "approved", "rejected"],

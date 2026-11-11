@@ -27,7 +27,15 @@ function LoginForm() {
         setError(result.error ?? "Sign in failed. Please try again.");
         return;
       }
-      router.push("/");
+      const destination = params.get("next");
+      let safeDestination = "/account";
+      if (destination?.startsWith("/") && !destination.startsWith("//")) {
+        const parsedDestination = new URL(destination, window.location.origin);
+        if (parsedDestination.origin === window.location.origin) {
+          safeDestination = `${parsedDestination.pathname}${parsedDestination.search}${parsedDestination.hash}`;
+        }
+      }
+      router.push(safeDestination);
       router.refresh();
     } catch {
       setError("We couldn't reach the server. Check your connection and try again.");

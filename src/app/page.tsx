@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { addCartItem, useCartCount } from "@/lib/cart";
 import { products, type CatalogProduct } from "@/lib/catalog";
+import AuthNavigation from "@/components/auth/auth-navigation";
 
 const deals = [
   "chronopulse-v2-ring",
@@ -164,9 +165,7 @@ export default function Home() {
               <Icon className="text-[18px]" name="shopping_bag" />
               <span className="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-[9px] font-bold text-white">{cartCount}</span>
             </Link>
-            <Link aria-label="Account" className="ml-1 flex h-9 w-9 items-center justify-center rounded-lg border border-subtle-border bg-elevated text-accent-light transition hover:border-accent-border" href="/login">
-              <Icon className="text-[18px]" name="person" />
-            </Link>
+            <AuthNavigation />
           </div>
         </div>
         <label className="flex items-center gap-2 border-t border-subtle-border px-4 py-2.5 md:hidden">
