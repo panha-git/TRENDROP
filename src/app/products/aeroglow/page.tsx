@@ -319,25 +319,31 @@ export default function ProductPage() {
         <section className="border-b border-slate-100 bg-white px-6 py-3.5 md:px-10">
           <div className="mx-auto flex max-w-[1440px] flex-wrap items-center justify-between gap-3 text-xs md:text-sm">
             <nav aria-label="Breadcrumb" className="flex items-center gap-2 font-medium text-slate-500">
-              <a className="transition hover:text-violet-600" href="#">Tech &amp; Gadgets</a>
+              <span>Tech &amp; Gadgets</span>
               <Icon className="text-[14px] text-slate-400">chevron_right</Icon>
-              <a className="transition hover:text-violet-600" href="#">Ambient Lighting</a>
+              <span>Ambient Lighting</span>
               <Icon className="text-[14px] text-slate-400">chevron_right</Icon>
               <span className="max-w-[220px] truncate font-semibold text-slate-900 md:max-w-md">AeroGlow RGB Sunset Lamp</span>
             </nav>
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-2 rounded-full border border-slate-200/70 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700">
-                <span className="h-2 w-2 animate-pulse rounded-full bg-red-500" />
-                <span>482 shoppers viewing right now</span>
+              <span className="h-2 w-2 rounded-full bg-violet-500" />
+              <span>Sample listing · activity is not live</span>
               </div>
               <span className="hidden text-slate-300 sm:inline">•</span>
               <div className="hidden items-center gap-1.5 rounded-full border border-teal-200/60 bg-teal-50 px-2.5 py-1 text-xs font-semibold text-teal-700 sm:flex">
                 <Icon className="text-[15px] text-teal-600">local_shipping</Icon>
-                <span>In Stock — Dispatches within 24h from California</span>
+              <span>Inventory and shipping are not connected</span>
               </div>
             </div>
           </div>
         </section>
+
+        <div className="mx-auto mt-5 max-w-[1440px] px-6 md:px-10">
+          <p className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs leading-5 text-amber-950" role="note">
+            Demo product page: images, prices, specifications, reviews, seller details, and activity are sample content. Payments, escrow, seller verification, inventory, and shipping are not connected.
+          </p>
+        </div>
 
         <section className="mx-auto w-full max-w-[1440px] px-6 py-8 md:px-10">
           <div className="grid grid-cols-12 items-start gap-8 lg:gap-10">
@@ -355,12 +361,8 @@ export default function ProductPage() {
                   />
                   <div className="pointer-events-none absolute left-4 top-4 flex flex-col gap-2">
                     <div className="flex items-center gap-1.5 rounded-full border border-white/10 bg-slate-900/90 px-3 py-1.5 text-xs font-bold text-white shadow-lg backdrop-blur-md">
-                      <Icon className="text-[15px] text-amber-400">local_fire_department</Icon>
-                      <span>#1 VIRAL ON TIKTOK (14.2M VIEWS)</span>
-                    </div>
-                    <div className="flex w-fit items-center gap-1.5 rounded-full bg-red-500 px-3 py-1 text-xs font-bold text-white shadow-md">
-                      <Icon className="text-[14px]">bolt</Icon>
-                      <span>FLASH DEAL ENDS IN <span className="font-mono">02:44:13</span></span>
+                      <Icon className="text-[15px] text-violet-300">image</Icon>
+                      <span>Sample product image</span>
                     </div>
                   </div>
                   <div className="absolute right-4 top-4 flex items-center gap-2">
@@ -431,9 +433,9 @@ export default function ProductPage() {
                 <div className="min-w-0 flex-1">
                   <div className="mb-1 flex flex-wrap items-center gap-2">
                     <span className="text-xs font-bold text-slate-900">@maya.techvibes</span>
-                    <span className="rounded-full bg-purple-100 px-2 py-0.5 text-[10px] font-semibold text-violet-700">Top Creator Review</span>
+                    <span className="rounded-full bg-purple-100 px-2 py-0.5 text-[10px] font-semibold text-violet-700">Sample creator quote</span>
                     <span className="ml-auto flex items-center gap-0.5 text-[11px] font-semibold text-teal-600">
-                      <Icon className="text-[13px]">verified</Icon> Verified Buyer
+                      <Icon className="text-[13px]">info</Icon> Sample content
                     </span>
                   </div>
                   <p className="text-xs italic leading-snug text-slate-600">
@@ -651,7 +653,7 @@ export default function ProductPage() {
                     <div className="text-center">
                       <div className="font-[family-name:var(--font-headline)] text-4xl font-extrabold text-slate-900">4.9</div>
                       <RatingStars />
-                      <div className="mt-1 text-xs font-medium text-slate-500">1,840 verified reviews</div>
+                      <div className="mt-1 text-xs font-medium text-slate-500">Illustrative review data only</div>
                     </div>
                     <div className="hidden h-14 w-px bg-slate-200 sm:block" />
                     <div className="w-44 space-y-1 text-xs text-slate-500">
@@ -676,7 +678,7 @@ export default function ProductPage() {
                             <span className="flex h-8 w-8 items-center justify-center rounded-full bg-purple-100 text-xs font-bold text-violet-600">{initials}</span>
                             <span><span className="block text-xs font-bold text-slate-900">{name}</span><span className="text-[10px] text-slate-400">{location}</span></span>
                           </div>
-                          <span className="rounded-full bg-teal-50 px-2 py-0.5 text-[10px] font-bold text-teal-700"><Icon className="mr-1 align-middle text-[12px]">check_circle</Icon>Verified Purchase</span>
+                          <span className="rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-bold text-amber-800">Sample review</span>
                         </div>
                         <RatingStars size="text-[16px]" />
                         <h3 className="text-xs font-bold text-slate-900">{headline}</h3>
@@ -773,28 +775,51 @@ export default function ProductPage() {
                 <Icon className="text-2xl text-red-500">local_fire_department</Icon>
                 <span className="font-extrabold text-slate-900">TREND<span className="text-violet-600">ROP</span></span>
               </Link>
-              <p className="max-w-sm text-xs leading-relaxed text-slate-500">The high-velocity viral drops ecosystem. Real-time creator merchandise, kinetic trending items, verified merchant safety, and zero-friction checkout.</p>
+              <p className="max-w-sm text-xs leading-relaxed text-slate-500">Explore this sample product page. Product, creator, review, and seller content is illustrative; marketplace integrations are not connected.</p>
               <div className="flex flex-wrap items-center gap-3 pt-2">
-                <span className="flex items-center gap-1.5 rounded-full border border-slate-200/80 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-700"><Icon className="text-[15px] text-teal-600">verified_user</Icon>256-Bit Escrow Vault</span>
-                <span className="flex items-center gap-1.5 rounded-full border border-slate-200/80 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-700"><Icon className="text-[15px] text-violet-600">bolt</Icon>Instant Drop API</span>
+                <span className="flex items-center gap-1.5 rounded-full border border-slate-200/80 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-700">No payment integration</span>
+                <span className="flex items-center gap-1.5 rounded-full border border-slate-200/80 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-700">Sample catalog</span>
               </div>
             </div>
             {[
-              ["Discover", "Live Drop Feed", "Viral Gadgets", "Beauty & Cosmetics", "Creator Collaborations"],
-              ["Seller Hub", "Seller Portal Onboarding", "Creator Merchant Studio", "Merchant Verification", "Fast Payouts Guarantee"],
-              ["Trust & Legal", "Buyer Protection Guarantee", "Refund & Dispute Center", "Privacy Policy", "Terms of Service"],
-            ].map(([title, ...links]) => (
-              <div className="flex flex-col gap-3" key={title}>
-                <h2 className="font-[family-name:var(--font-headline)] text-sm font-bold text-slate-900">{title}</h2>
-                {links.map((link) => <a className="text-xs text-slate-500 transition hover:text-slate-900" href="#" key={link}>{link}</a>)}
+              {
+                title: "Discover",
+                links: [
+                  ["Product catalog", "/#browse-feed"],
+                  ["Featured products", "/#kinetic-flash"],
+                  ["Creator collections", "/#creator-merch"],
+                ],
+              },
+              {
+                title: "Seller Hub",
+                links: [
+                  ["Seller application", "/seller/onboarding"],
+                  ["Seller dashboard", "/seller/dashboard"],
+                ],
+              },
+              {
+                title: "Buyer",
+                links: [
+                  ["My orders", "/orders"],
+                  ["Cart & checkout", "/cart"],
+                ],
+              },
+            ].map((group) => (
+              <div className="flex flex-col gap-3" key={group.title}>
+                <h2 className="font-[family-name:var(--font-headline)] text-sm font-bold text-slate-900">{group.title}</h2>
+                {group.links.map(([label, href]) => (
+                  <Link className="text-xs text-slate-500 transition hover:text-slate-900" href={href} key={label}>
+                    {label}
+                  </Link>
+                ))}
               </div>
             ))}
           </div>
           <div className="flex flex-col items-center justify-between gap-4 pt-8 text-xs text-slate-500 md:flex-row">
-            <p>© 2025 TRENDROP Global Inc. Powered by Stripe Connect &amp; Shopify-grade escrow infrastructure.</p>
+            <p>© {new Date().getFullYear()} TRENDROP · Demo marketplace preview</p>
             <div className="flex items-center gap-6">
-              <span className="flex items-center gap-1.5"><Icon className="text-[16px] text-teal-600">lock</Icon>Encrypted Checkout</span>
-              <span className="flex items-center gap-1.5"><Icon className="text-[16px] text-violet-600">local_shipping</Icon>Global Tracked Drops</span>
+              <span>Payments not connected</span>
+              <span>Shipping not connected</span>
             </div>
           </div>
         </div>
