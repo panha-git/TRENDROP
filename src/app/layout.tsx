@@ -23,7 +23,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${inter.variable} ${plusJakarta.variable} h-full antialiased`}
     >
-      <body className="min-h-full bg-[#f8f9fc] text-slate-900">{children}</body>
+      <body className="min-h-full">{children}</body>
     </html>
   );
 }

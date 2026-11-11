@@ -123,21 +123,21 @@ export default function Home() {
   }
 
   return (
-    <div className="commerce-theme">
-      <header className="fixed inset-x-0 top-0 z-50 border-b border-slate-200/80 bg-white/90">
+    <div className="min-h-screen bg-app-background text-primary">
+      <header className="fixed inset-x-0 top-0 z-50 border-b border-subtle-border bg-surface/90">
         <div className="mx-auto flex h-[68px] max-w-[1440px] items-center justify-between gap-5 px-4 sm:px-6 lg:px-8">
           <div className="flex min-w-0 flex-1 items-center gap-5 xl:gap-8">
             <Link className="group flex shrink-0 items-center gap-2" href="/">
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-600 text-white transition">
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent text-white transition">
                 <Icon className="text-[22px]" name="bolt" />
               </span>
               <span className="font-[family-name:var(--font-headline)] text-xl font-extrabold tracking-tight text-white">TRENDROP</span>
             </Link>
-            <label className="hidden min-w-0 max-w-lg flex-1 items-center rounded-xl border border-slate-200/80 bg-slate-50 px-3 py-2.5 text-sm transition focus-within:border-purple-500 md:flex">
-              <Icon className="mr-2 text-[18px] text-slate-400" name="search" />
+            <label className="hidden min-w-0 max-w-lg flex-1 items-center rounded-xl border border-subtle-border bg-elevated px-3 py-2.5 text-sm transition focus-within:border-accent md:flex">
+              <Icon className="mr-2 text-[18px] text-secondary" name="search" />
               <input
                 aria-label="Search drops"
-                className="w-full min-w-0 bg-transparent text-sm font-medium text-white outline-none placeholder:text-slate-400"
+                className="w-full min-w-0 bg-transparent text-sm font-medium text-white outline-none placeholder:text-secondary"
                 onChange={(event) => setQuery(event.target.value)}
                 placeholder="Search products and categories"
                 value={query}
@@ -145,35 +145,35 @@ export default function Home() {
             </label>
           </div>
 
-          <nav aria-label="Main navigation" className="hidden items-center gap-5 text-xs font-semibold text-slate-400 xl:flex">
-            <a className="border-b-2 border-purple-600 py-2 font-bold text-purple-700" href="#browse-feed">Trending Drops</a>
-            <a className="py-2 transition hover:text-slate-900" href="#kinetic-flash">Featured</a>
-            <a className="py-2 transition hover:text-slate-900" href="#browse-feed">Tech &amp; Gadgets</a>
-            <a className="py-2 transition hover:text-slate-900" href="#browse-feed">Beauty &amp; Glow</a>
-            <a className="py-2 transition hover:text-slate-900" href="#creator-merch">Creator Merch</a>
+          <nav aria-label="Main navigation" className="hidden items-center gap-5 text-xs font-semibold text-secondary xl:flex">
+            <a className="border-b-2 border-accent py-2 font-bold text-accent-light" href="#browse-feed">Trending Drops</a>
+            <a className="py-2 transition hover:text-primary" href="#kinetic-flash">Featured</a>
+            <a className="py-2 transition hover:text-primary" href="#browse-feed">Tech &amp; Gadgets</a>
+            <a className="py-2 transition hover:text-primary" href="#browse-feed">Beauty &amp; Glow</a>
+            <a className="py-2 transition hover:text-primary" href="#creator-merch">Creator Merch</a>
           </nav>
 
           <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
-            <Link className="hidden items-center gap-2 rounded-lg bg-purple-600 px-3 py-2 text-xs font-semibold text-white transition hover:bg-purple-700 sm:inline-flex" href="/seller/onboarding">
+            <Link className="hidden items-center gap-2 rounded-lg bg-accent px-3 py-2 text-xs font-semibold text-white transition hover:bg-accent sm:inline-flex" href="/seller/onboarding">
               Become a Seller <Icon className="text-[14px]" name="arrow_forward" />
             </Link>
-            <button aria-label="Notifications" className="relative flex h-9 w-9 items-center justify-center rounded-lg text-slate-400 transition hover:bg-slate-100 hover:text-white" type="button" onClick={() => setNotice("Notifications are not connected yet.")}>
+            <button aria-label="Notifications" className="relative flex h-9 w-9 items-center justify-center rounded-lg text-secondary transition hover:bg-elevated hover:text-white" type="button" onClick={() => setNotice("Notifications are not connected yet.")}>
               <Icon className="text-[18px]" name="notifications" />
             </button>
-            <Link aria-label={`Cart (${cartCount} items)`} className="relative flex h-9 w-9 items-center justify-center rounded-lg text-slate-400 transition hover:bg-slate-100 hover:text-white" href="/cart">
+            <Link aria-label={`Cart (${cartCount} items)`} className="relative flex h-9 w-9 items-center justify-center rounded-lg text-secondary transition hover:bg-elevated hover:text-white" href="/cart">
               <Icon className="text-[18px]" name="shopping_bag" />
-              <span className="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-purple-600 px-1 text-[9px] font-bold text-white">{cartCount}</span>
+              <span className="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-[9px] font-bold text-white">{cartCount}</span>
             </Link>
-            <Link aria-label="Account" className="ml-1 flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-purple-700 transition hover:border-purple-300" href="/account">
+            <Link aria-label="Account" className="ml-1 flex h-9 w-9 items-center justify-center rounded-lg border border-subtle-border bg-elevated text-accent-light transition hover:border-accent-border" href="/account">
               <Icon className="text-[18px]" name="person" />
             </Link>
           </div>
         </div>
-        <label className="flex items-center gap-2 border-t border-slate-200/80 px-4 py-2.5 md:hidden">
-          <Icon className="text-[18px] text-slate-400" name="search" />
+        <label className="flex items-center gap-2 border-t border-subtle-border px-4 py-2.5 md:hidden">
+          <Icon className="text-[18px] text-secondary" name="search" />
           <input
             aria-label="Search products"
-            className="w-full min-w-0 bg-transparent text-sm text-white outline-none placeholder:text-slate-400"
+            className="w-full min-w-0 bg-transparent text-sm text-white outline-none placeholder:text-secondary"
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Search products and categories"
             value={query}
@@ -183,37 +183,35 @@ export default function Home() {
 
       <main className="mx-auto max-w-[1440px] space-y-8 px-4 pb-14 pt-32 sm:px-6 md:pt-24 lg:space-y-10 lg:px-8">
         <section className="commerce-card relative overflow-hidden p-5 sm:p-8 lg:p-10">
-          <div className="pointer-events-none absolute -left-20 -top-32 h-96 w-96 rounded-full bg-purple-200/40 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-32 -right-20 h-96 w-96 rounded-full bg-rose-200/30 blur-3xl" />
           <div className="relative z-10 grid items-center gap-8 lg:grid-cols-12 lg:gap-12">
             <div className="flex flex-col justify-between lg:col-span-7">
               <div>
                 <div className="mb-4 flex flex-wrap items-center gap-2">
-                  <span className="inline-flex items-center rounded-md border border-purple-200/60 bg-purple-50 px-2.5 py-1 text-xs font-semibold text-purple-700">
+                  <span className="inline-flex items-center rounded-md border border-accent-border bg-accent-muted px-2.5 py-1 text-xs font-semibold text-accent-light">
                     TRENDROP marketplace
                   </span>
-                  <span className="text-xs text-slate-400">Product discovery</span>
+                  <span className="text-xs text-secondary">Product discovery</span>
                 </div>
-                <h1 className="mb-4 font-[family-name:var(--font-headline)] text-4xl font-extrabold leading-[1.08] tracking-tight text-slate-900 sm:text-5xl">
+                <h1 className="mb-4 font-[family-name:var(--font-headline)] text-4xl font-extrabold leading-[1.08] tracking-tight text-primary sm:text-5xl">
                   Discover products<br />
-                  <span className="text-purple-700">worth sharing.</span>
+                  <span className="text-accent-light">worth sharing.</span>
                 </h1>
-                <p className="mb-6 max-w-xl text-sm leading-relaxed text-slate-600 sm:text-base">
+                <p className="mb-6 max-w-xl text-sm leading-relaxed text-secondary sm:text-base">
                   Explore the TRENDROP catalog, find creator collections, and add products to your cart.
                 </p>
-                <div className="mb-6 flex flex-col items-start justify-between gap-4 rounded-xl border border-slate-200/80 bg-slate-50 p-4 sm:flex-row sm:items-center sm:p-5">
+                <div className="mb-6 flex flex-col items-start justify-between gap-4 rounded-xl border border-subtle-border bg-elevated p-4 sm:flex-row sm:items-center sm:p-5">
                   <div className="flex items-center gap-3">
-                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-purple-50 text-purple-700">
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent-muted text-accent-light">
                       <Icon className="text-[22px]" name="shopping_bag" />
                     </span>
                     <div>
-                      <span className="block text-[11px] font-bold uppercase tracking-wider text-slate-400">Browse the catalog</span>
-                      <span className="font-[family-name:var(--font-headline)] text-base font-bold text-slate-900">Shop by category</span>
+                      <span className="block text-[11px] font-bold uppercase tracking-wider text-secondary">Browse the catalog</span>
+                      <span className="font-[family-name:var(--font-headline)] text-base font-bold text-primary">Shop by category</span>
                     </div>
                   </div>
                   <div className="flex flex-wrap gap-2 text-xs">
                     {["Tech & Audio", "Beauty & Glow", "Wellness"].map((item) => (
-                      <span className="rounded-md border border-slate-200 bg-white px-2.5 py-1.5 text-slate-400" key={item}>{item}</span>
+                      <span className="rounded-md border border-subtle-border bg-surface px-2.5 py-1.5 text-secondary" key={item}>{item}</span>
                     ))}
                   </div>
                 </div>
@@ -222,7 +220,7 @@ export default function Home() {
                     Shop Viral Drops <Icon className="text-[16px]" name="arrow_forward" />
                   </a>
                   <Link className="commerce-button-secondary inline-flex items-center gap-2 px-4 py-3 text-xs font-semibold" href="/seller/dashboard">
-                    <span className="text-purple-600">◎</span> Creator Labs
+                    <span className="text-accent-light">◎</span> Creator Labs
                   </Link>
                 </div>
               </div>
@@ -235,19 +233,19 @@ export default function Home() {
                   <div className="absolute left-3 top-3 flex flex-col gap-1.5">
                     <span className="inline-flex items-center gap-1 rounded-md bg-slate-950/85 px-2 py-1 text-[10px] font-semibold text-white">Featured product</span>
                   </div>
-                  <span className="absolute bottom-3 right-3 rounded-lg bg-rose-600 px-2 py-1 text-[10px] font-extrabold text-white">{products[0].discount}</span>
+                  <span className="absolute bottom-3 right-3 rounded-lg bg-accent px-2 py-1 text-[10px] font-extrabold text-white">{products[0].discount}</span>
                 </div>
                 <div className="pt-3">
                   <div className="flex items-center justify-between gap-2 text-[10px]">
-                    <span className="font-bold uppercase tracking-wider text-purple-700">{products[0].category}</span>
-                    <span className="text-xs text-slate-400">Sample catalog</span>
+                    <span className="font-bold uppercase tracking-wider text-accent-light">{products[0].category}</span>
+                    <span className="text-xs text-secondary">Sample catalog</span>
                   </div>
-                  <h2 className="mt-1 font-[family-name:var(--font-headline)] text-sm font-bold text-slate-900">{products[0].name}</h2>
-                  <p className="mt-1 text-xs leading-relaxed text-slate-500">View product details and available options.</p>
+                  <h2 className="mt-1 font-[family-name:var(--font-headline)] text-sm font-bold text-primary">{products[0].name}</h2>
+                  <p className="mt-1 text-xs leading-relaxed text-secondary">View product details and available options.</p>
                   <div className="mt-2 flex items-center gap-2">
-                    <span className="font-[family-name:var(--font-headline)] text-lg font-extrabold text-slate-900">${products[0].price.toFixed(2)}</span>
-                    <span className="text-[10px] text-slate-400 line-through">${products[0].compareAtPrice.toFixed(2)}</span>
-                    <span className="text-[10px] text-slate-400">Sample price</span>
+                    <span className="font-[family-name:var(--font-headline)] text-lg font-extrabold text-primary">${products[0].price.toFixed(2)}</span>
+                    <span className="text-[10px] text-secondary line-through">${products[0].compareAtPrice.toFixed(2)}</span>
+                    <span className="text-[10px] text-secondary">Sample price</span>
                   </div>
                 </div>
               </Link>
@@ -255,27 +253,27 @@ export default function Home() {
                 <button className="commerce-button-primary flex flex-1 items-center justify-center gap-2 px-3 py-2.5 text-xs font-bold" onClick={() => addToCart(products[0])} type="button">
                   <Icon className="text-[14px]" name="shopping_cart" /> Add to Cart
                 </button>
-                <Link aria-label="View product details" className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-600 transition hover:bg-slate-50" href="/products/aeroglow">→</Link>
+                <Link aria-label="View product details" className="flex h-9 w-9 items-center justify-center rounded-lg border border-subtle-border text-secondary transition hover:bg-elevated" href="/products/aeroglow">→</Link>
               </div>
             </div>
           </div>
         </section>
 
         <section className="commerce-card p-4 sm:p-5" id="kinetic-flash">
-          <div className="mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-subtle-border pb-3">
             <h2 className="commerce-section-heading">Featured products</h2>
-            <span className="text-xs text-slate-500">Sample catalog · prices in USD</span>
+            <span className="text-xs text-secondary">Sample catalog · prices in USD</span>
           </div>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {deals.map((product) => (
-              <button className="flex min-w-0 items-center gap-3 rounded-lg border border-slate-100 bg-slate-50 p-2.5 text-left transition hover:border-purple-200 hover:bg-purple-50/40 focus-visible:outline-2 focus-visible:outline-purple-400" key={product.id} onClick={() => addToCart(product)} type="button">
-                <span className="relative h-14 w-14 shrink-0 overflow-hidden rounded-md bg-slate-100">
+              <button className="flex min-w-0 items-center gap-3 rounded-lg border border-subtle-border bg-elevated p-2.5 text-left transition hover:border-accent-border hover:bg-accent-muted focus-visible:outline-2 focus-visible:outline-purple-400" key={product.id} onClick={() => addToCart(product)} type="button">
+                <span className="relative h-14 w-14 shrink-0 overflow-hidden rounded-md bg-elevated">
                   <Image alt="" className="object-cover" fill sizes="56px" src={product.image} unoptimized />
                 </span>
                 <span className="min-w-0 flex-1">
-                  <span className="block truncate text-xs font-semibold text-slate-900">{product.name}</span>
-                  <span className="mt-1 flex items-center gap-2 text-xs"><span className="font-bold text-slate-900">${product.price.toFixed(2)}</span><span className="text-slate-400 line-through">${product.compareAtPrice.toFixed(2)}</span></span>
-                  <span className="mt-1 block text-[10px] text-slate-500">Add to cart</span>
+                  <span className="block truncate text-xs font-semibold text-primary">{product.name}</span>
+                  <span className="mt-1 flex items-center gap-2 text-xs"><span className="font-bold text-primary">${product.price.toFixed(2)}</span><span className="text-secondary line-through">${product.compareAtPrice.toFixed(2)}</span></span>
+                  <span className="mt-1 block text-[10px] text-secondary">Add to cart</span>
                 </span>
               </button>
             ))}
@@ -288,8 +286,8 @@ export default function Home() {
               <button
                 className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border px-3 py-2 text-[10px] font-semibold transition ${
                   category === item
-                    ? "border-purple-600 bg-purple-600 text-white"
-                    : "border-slate-200 bg-slate-50 text-slate-400 hover:border-purple-200 hover:bg-purple-50"
+                    ? "border-accent bg-accent text-white"
+                    : "border-subtle-border bg-elevated text-secondary hover:border-accent-border hover:bg-accent-muted"
                 }`}
                 key={item}
                 onClick={() => setCategory(item)}
@@ -298,8 +296,8 @@ export default function Home() {
                 {index === 0 ? "▦" : ["", "♨", "⚡", "♬", "✧", "▣", "♙"][index]} {item}
               </button>
             ))}
-            <label className="ml-auto hidden items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-500 sm:flex">
-              Sort: <select className="bg-transparent font-semibold text-purple-700 outline-none" defaultValue="TikTok Velocity"><option>TikTok Velocity</option><option>Most Popular</option><option>Price: Low to High</option></select>
+            <label className="ml-auto hidden items-center gap-2 rounded-lg border border-subtle-border bg-elevated px-3 py-2 text-xs text-secondary sm:flex">
+              Sort: <select className="bg-transparent font-semibold text-accent-light outline-none" defaultValue="TikTok Velocity"><option>TikTok Velocity</option><option>Most Popular</option><option>Price: Low to High</option></select>
             </label>
           </div>
 
@@ -307,23 +305,23 @@ export default function Home() {
             {visibleProducts.map((product) => {
               const saved = savedProducts.includes(product.name);
               return (
-                <article className="commerce-card group flex flex-col justify-between p-3 transition duration-200 hover:border-purple-200" key={product.name}>
-                  <div className="relative mb-3 aspect-square overflow-hidden rounded-lg border border-slate-100 bg-slate-100">
+                <article className="commerce-card group flex flex-col justify-between p-3 transition duration-200 hover:border-accent-border" key={product.name}>
+                  <div className="relative mb-3 aspect-square overflow-hidden rounded-lg border border-subtle-border bg-elevated">
                     <Link aria-label={`View ${product.name}`} className="absolute inset-0 z-0" href={`/products/${product.slug}`} />
                     <Image alt={product.name} className="object-cover transition-transform duration-500 group-hover:scale-105" fill sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw" src={product.image} unoptimized />
                     <span className="absolute left-2.5 top-2.5 rounded-md bg-slate-950/85 px-2 py-1 text-[10px] font-semibold text-white">{product.discount}</span>
-                    <button aria-label={saved ? `Remove ${product.name} from wishlist` : `Save ${product.name}`} aria-pressed={saved} className={`absolute right-2.5 top-2.5 z-10 flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white/90 transition hover:text-purple-700 ${saved ? "text-purple-700" : "text-slate-600"}`} onClick={() => toggleSaved(product.name)} type="button">
+                    <button aria-label={saved ? `Remove ${product.name} from wishlist` : `Save ${product.name}`} aria-pressed={saved} className={`absolute right-2.5 top-2.5 z-10 flex h-9 w-9 items-center justify-center rounded-full border border-subtle-border bg-surface/90 transition hover:text-accent-light ${saved ? "text-accent-light" : "text-secondary"}`} onClick={() => toggleSaved(product.name)} type="button">
                       <Icon className="text-[16px]" name="favorite" />
                     </button>
                   </div>
                   <div className="flex flex-1 flex-col justify-between">
                     <div>
-                      <div className="mb-1 text-xs text-slate-500">{product.seller}</div>
-                      <Link className="line-clamp-1 font-[family-name:var(--font-headline)] text-sm font-bold text-slate-900 transition group-hover:text-purple-700" href={`/products/${product.slug}`}>{product.name}</Link>
-                      <div className="mt-1.5 flex items-center gap-1.5 text-xs"><span className="text-amber-500">★</span><span className="font-semibold text-slate-900">{product.rating}</span><span className="text-slate-500">sample rating</span></div>
+                      <div className="mb-1 text-xs text-secondary">{product.seller}</div>
+                      <Link className="line-clamp-1 font-[family-name:var(--font-headline)] text-sm font-bold text-primary transition group-hover:text-accent-light" href={`/products/${product.slug}`}>{product.name}</Link>
+                      <div className="mt-1.5 flex items-center gap-1.5 text-xs"><span className="text-amber-500">★</span><span className="font-semibold text-primary">{product.rating}</span><span className="text-secondary">sample rating</span></div>
                     </div>
                     <div className="pt-3">
-                      <div className="mb-2.5 flex items-baseline gap-2"><span className="font-[family-name:var(--font-headline)] text-lg font-extrabold text-slate-900">${product.price.toFixed(2)}</span><span className="text-xs text-slate-400 line-through">${product.compareAtPrice.toFixed(2)}</span></div>
+                      <div className="mb-2.5 flex items-baseline gap-2"><span className="font-[family-name:var(--font-headline)] text-lg font-extrabold text-primary">${product.price.toFixed(2)}</span><span className="text-xs text-secondary line-through">${product.compareAtPrice.toFixed(2)}</span></div>
                       <button className="commerce-button-secondary flex w-full items-center justify-center gap-1.5 py-2.5 text-xs font-semibold" onClick={() => addToCart(product)} type="button">
                         <Icon className="text-[16px]" name="shopping_cart" />Add to Cart
                       </button>
@@ -333,7 +331,7 @@ export default function Home() {
               );
             })}
             {visibleProducts.length === 0 && (
-              <p className="commerce-card col-span-full p-8 text-center text-sm text-slate-500">No products match your search. Try another keyword or category.</p>
+              <p className="commerce-card col-span-full p-8 text-center text-sm text-secondary">No products match your search. Try another keyword or category.</p>
             )}
           </div>
         </section>
@@ -341,20 +339,20 @@ export default function Home() {
         <section className="space-y-4" id="creator-merch">
           <div className="flex flex-wrap items-end justify-between gap-2">
             <div>
-              <span className="text-xs font-semibold uppercase tracking-wider text-purple-600">Creator collections</span>
+              <span className="text-xs font-semibold uppercase tracking-wider text-accent-light">Creator collections</span>
               <h2 className="commerce-section-heading mt-1">Featured creator collections</h2>
             </div>
-            <Link className="text-sm font-semibold text-purple-700 hover:text-purple-900" href="/seller/dashboard">Explore creator tools <span aria-hidden="true">→</span></Link>
+            <Link className="text-sm font-semibold text-accent-light hover:text-accent-light" href="/seller/dashboard">Explore creator tools <span aria-hidden="true">→</span></Link>
           </div>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             {studios.map((studio) => (
               <article className="commerce-card p-3.5" key={studio.name}>
                 <div className="mb-3 flex items-center gap-2.5">
                   <Image alt="" className="h-9 w-9 rounded-full object-cover" height={36} src={studio.avatar} unoptimized width={36} />
-                  <div><h3 className="text-sm font-semibold text-slate-900">{studio.name}</h3><p className="text-xs text-slate-500">Sample creator collection</p></div>
+                  <div><h3 className="text-sm font-semibold text-primary">{studio.name}</h3><p className="text-xs text-secondary">Sample creator collection</p></div>
                 </div>
                 <div className="mb-3 grid grid-cols-3 gap-1.5">
-                  {studio.images.map((image, index) => <div className="relative h-16 overflow-hidden rounded-lg bg-slate-100" key={`${studio.name}-${index}`}><Image alt={`${studio.name} product ${index + 1}`} className="object-cover" fill sizes="120px" src={image} unoptimized /></div>)}
+                  {studio.images.map((image, index) => <div className="relative h-16 overflow-hidden rounded-lg bg-elevated" key={`${studio.name}-${index}`}><Image alt={`${studio.name} product ${index + 1}`} className="object-cover" fill sizes="120px" src={image} unoptimized /></div>)}
                 </div>
                 <div className="flex gap-2">
                   <Link className="commerce-button-primary flex flex-1 items-center justify-center py-2 text-xs font-semibold" href="/seller/dashboard">Visit store</Link>
@@ -366,19 +364,19 @@ export default function Home() {
         </section>
 
         <section className="commerce-card flex flex-wrap items-center justify-between gap-3 px-4 py-3 text-sm">
-          <span className="font-semibold text-slate-900">Catalog preview</span>
-          <span className="text-slate-500">Product ratings and comparison prices are sample data.</span>
-          <span className="text-slate-500">Checkout saves an unpaid order preview; payment and shipping are not connected.</span>
+          <span className="font-semibold text-primary">Catalog preview</span>
+          <span className="text-secondary">Product ratings and comparison prices are sample data.</span>
+          <span className="text-secondary">Checkout saves an unpaid order preview; payment and shipping are not connected.</span>
         </section>
       </main>
 
-      <footer className="border-t border-slate-200 bg-white">
+      <footer className="border-t border-subtle-border bg-surface">
         <div className="mx-auto max-w-[1440px] px-4 py-10 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 gap-8 border-b border-slate-100 pb-8 md:grid-cols-2 lg:grid-cols-5">
+          <div className="grid grid-cols-1 gap-8 border-b border-subtle-border pb-8 md:grid-cols-2 lg:grid-cols-5">
             <div className="space-y-3 lg:col-span-2">
-              <Link className="flex items-center gap-2 font-[family-name:var(--font-headline)] text-lg font-extrabold text-slate-900" href="/"><span className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-600 text-white"><Icon name="bolt" /></span>TRENDROP</Link>
-              <p className="max-w-sm text-sm leading-relaxed text-slate-500">Discover products, creator collections, and a simple cart experience.</p>
-              <div className="flex flex-wrap gap-2"><span className="rounded-md border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-medium text-slate-400">Sample catalog</span><span className="rounded-md border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-medium text-slate-400">No payment integration</span></div>
+              <Link className="flex items-center gap-2 font-[family-name:var(--font-headline)] text-lg font-extrabold text-primary" href="/"><span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent text-white"><Icon name="bolt" /></span>TRENDROP</Link>
+              <p className="max-w-sm text-sm leading-relaxed text-secondary">Discover products, creator collections, and a simple cart experience.</p>
+              <div className="flex flex-wrap gap-2"><span className="rounded-md border border-subtle-border bg-elevated px-2.5 py-1.5 text-xs font-medium text-secondary">Sample catalog</span><span className="rounded-md border border-subtle-border bg-elevated px-2.5 py-1.5 text-xs font-medium text-secondary">No payment integration</span></div>
             </div>
             {[
               ["Discover", ["All products", "Tech & Audio", "Beauty & Cosmetics", "Creator Collections"], "/"],
@@ -386,19 +384,19 @@ export default function Home() {
               ["Account", ["My account", "My orders", "Cart & checkout", "Registration"], "/account"],
             ].map(([title, links, href]) => (
               <div className="flex flex-col gap-3" key={title as string}>
-                <h2 className="text-[10px] font-bold uppercase tracking-wider text-slate-900">{title}</h2>
-                {(links as string[]).map((link) => <Link className="text-xs text-slate-500 transition hover:text-slate-900" href={href as string} key={link}>{link}</Link>)}
+                <h2 className="text-[10px] font-bold uppercase tracking-wider text-primary">{title}</h2>
+                {(links as string[]).map((link) => <Link className="text-xs text-secondary transition hover:text-primary" href={href as string} key={link}>{link}</Link>)}
               </div>
             ))}
           </div>
-          <div className="flex flex-col items-center justify-between gap-3 pt-6 text-[9px] text-slate-500 md:flex-row">
+          <div className="flex flex-col items-center justify-between gap-3 pt-6 text-[9px] text-secondary md:flex-row">
             <span>© 2026 TRENDROP</span>
             <div className="flex gap-5"><Link href="/cart">Cart &amp; checkout</Link><Link href="/orders">My orders</Link></div>
           </div>
         </div>
       </footer>
 
-      {notice && <div className="fixed bottom-5 left-1/2 z-[60] -translate-x-1/2 rounded-xl bg-slate-900 px-5 py-3 text-sm font-medium text-white shadow-lg" role="status">{notice}</div>}
+      {notice && <div className="fixed bottom-5 left-1/2 z-[60] -translate-x-1/2 rounded-xl bg-surface px-5 py-3 text-sm font-medium text-white shadow-lg" role="status">{notice}</div>}
     </div>
   );
 }
