@@ -52,10 +52,10 @@ jobs:
           {
             echo "## TRENDROP automatic quality review"
             echo
-            echo "- Commit: [\`$${COMMIT_SHA::7}\`]($${COMMIT_URL})"
-            echo "- Message: $${COMMIT_MESSAGE}"
-            echo "- ESLint: **$${LINT_OUTCOME}**"
-            echo "- Production build: **$${BUILD_OUTCOME}**"
+            echo "- Commit: [${COMMIT_SHA:0:7}](${COMMIT_URL})"
+            echo "- Message: ${COMMIT_MESSAGE}"
+            echo "- ESLint: **${LINT_OUTCOME}**"
+            echo "- Production build: **${BUILD_OUTCOME}**"
             echo
             if [ "$LINT_OUTCOME" = "success" ] && [ "$BUILD_OUTCOME" = "success" ]; then
               echo "### Verdict: GOOD"
