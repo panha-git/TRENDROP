@@ -1,0 +1,74 @@
+name: TRENDROP Quality Check
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: trendrop-quality-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Lint and production build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        id: lint
+        continue-on-error: true
+        run: npm run lint
+
+      - name: Build production app
+        id: build
+        continue-on-error: true
+        run: npm run build
+
+      - name: Publish review summary
+        if: always()
+        env:
+          LINT_OUTCOME: ${{ steps.lint.outcome }}
+          BUILD_OUTCOME: ${{ steps.build.outcome }}
+          COMMIT_SHA: ${{ github.sha }}
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+          COMMIT_URL: ${{ github.event.head_commit.url }}
+        run: |
+          {
+            echo "## TRENDROP automatic quality review"
+            echo
+            echo "- Commit: [\`$${COMMIT_SHA::7}\`]($${COMMIT_URL})"
+            echo "- Message: $${COMMIT_MESSAGE}"
+            echo "- ESLint: **$${LINT_OUTCOME}**"
+            echo "- Production build: **$${BUILD_OUTCOME}**"
+            echo
+            if [ "$LINT_OUTCOME" = "success" ] && [ "$BUILD_OUTCOME" = "success" ]; then
+              echo "### Verdict: GOOD"
+              echo "Both configured checks passed. This confirms lint/build status only; it does not prove the UI, database flows, or user journeys work correctly."
+            elif [ "$BUILD_OUTCOME" != "success" ]; then
+              echo "### Verdict: BAD"
+              echo "The production build did not pass. Open the failed step above and fix the build errors before relying on this commit."
+            else
+              echo "### Verdict: MIXED"
+              echo "The production build passed, but ESLint did not. Review and fix the lint output."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if [ "$LINT_OUTCOME" != "success" ] || [ "$BUILD_OUTCOME" != "success" ]; then
+            exit 1
+          fi
